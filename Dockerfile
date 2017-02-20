@@ -4,22 +4,21 @@ ENV APTLIST="ca-certificates-mono bzip2 libcurl4-openssl-dev wget unzip sqlite3 
 
 # install packages
 RUN apt-get update -q && \
-apt-get install $APTLIST -qy && \
+    apt-get install $APTLIST -qy && \
 
-mkdir /app && \
-mkdir /config && \
+    mkdir /app && \
+    mkdir /config && \
 
-curl -o /tmp/s6-overlay.tar.gz -L \
-	"https://github.com/just-containers/s6-overlay/releases/download/v1.18.1.5/s6-overlay-amd64.tar.gz" && \
- tar xfz /tmp/s6-overlay.tar.gz -C / && \
+    curl -o /tmp/s6-overlay.tar.gz -L "https://github.com/just-containers/s6-overlay/releases/download/v1.18.1.5/s6-overlay-amd64.tar.gz" && \
+    tar xfz /tmp/s6-overlay.tar.gz -C / && \
 
 # clean up
-apt-get clean && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
+    apt-get clean && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/* && \
 
-RUN cert-sync /etc/ssl/certs/ca-certificates.crt
+    cert-sync /etc/ssl/certs/ca-certificates.crt
 
-RUN useradd -u 9001 -U -d /config -s /bin/false ombi && \
-usermod -G users ombi
+# add user 'ombi'
+RUN useradd -u 9001 -U -d /config -s /bin/false ombi && usermod -G users ombi
 
 COPY root/ /
 
