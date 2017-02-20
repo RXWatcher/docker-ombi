@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bash
+
+PUID=${PUID:-9001}
+PGID=${PGID:-9001}
+
+groupmod -o -g "$PGID" ombi
+usermod -o -u "$PUID" ombi
